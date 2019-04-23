@@ -212,8 +212,10 @@ public class NewRequestForm extends javax.swing.JFrame
         }
         else
         {
-            listener.onNewRequestRecordAdded((RequestModel) result.data);
+            this.setVisible(false);
             this.dispose();
+            listener.onNewRequestRecordAdded((RequestModel) result.data);
+            
         }
     }//GEN-LAST:event_saveButtonActionPerformed
 

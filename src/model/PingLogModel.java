@@ -11,6 +11,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.icmp4j.IcmpPingRequest;
+import org.icmp4j.IcmpPingResponse;
+import org.icmp4j.IcmpPingUtil;
 import util.DateUtils;
 
 /**
@@ -154,11 +157,14 @@ public class PingLogModel extends Thread
      
      public void pingIpHost()
      {
-        Boolean isReachable = false;
+        Boolean isReachable = true;
         try
         {
-            Socket socket = new Socket(pingModel.getIpHostname(), pingModel.getPort());
-            if(socket.isConnected())
+            final IcmpPingRequest request = IcmpPingUtil.createIcmpPingRequest ();
+            request.setHost (pingModel.getIpHostname());
+            final IcmpPingResponse response = IcmpPingUtil.executePingRequest (request);
+            final String formattedResponse = IcmpPingUtil.formatResponse (response);
+            if(!formattedResponse.startsWith("Error:"))
             {               
                 isReachable = true;
             }
@@ -169,17 +175,10 @@ public class PingLogModel extends Thread
                 failCount++;
                 currentStatus = false;
             }
-            socket.close();
-
         }
-        catch (UnknownHostException ex)
+        catch(Exception e)
         {
             isReachable = false;
-        } 
-        catch (IOException ex)
-        {
-            isReachable = false;
-            
         }
         finally
         {

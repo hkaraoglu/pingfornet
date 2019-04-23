@@ -146,9 +146,9 @@ public class HardwareModel
         {
             result.message = "Invalid interval value";
         }
-        else if(Integer.parseInt(interval) < 60)
+        else if(Integer.parseInt(interval) < 15)
         {
-            result.message = "Interval value must not be lower than 60";
+            result.message = "Interval value must not be lower than 15";
         }
         else
         {
