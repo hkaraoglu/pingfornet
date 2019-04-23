@@ -1,19 +1,11 @@
 package model;
 
 
-import com.jcabi.ssh.Shell;
 import com.jcabi.ssh.Shell.Plain;
-import com.jcabi.ssh.Ssh;
 import data.SQLite;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.UnknownHostException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -27,7 +19,7 @@ import util.DateUtils;
  */
 public class HardwareLogModel extends Thread
 {
-    private HardwareModel hardwareModel;
+    private final HardwareModel hardwareModel;
     private int hardwareLogId;
     private double cpuUsage = 0;
     private double ramUsage = 0;
@@ -127,8 +119,30 @@ public class HardwareLogModel extends Thread
               diskUsage = Double.parseDouble(result.replace("%", ""));
               result = instance.sendCommand(cpuUsageCommand);
               cpuUsage = Double.parseDouble(result.replace("%us,", ""));
+              boolean isOverflowed = false;
+              String overFlowType = "";
+              if(ramUsage >= ramOverflowCount)
+              {
+                  isOverflowed = true;
+                  overFlowType = "RAM";
+              }
+              else if(diskUsage >= diskOverflowCount)
+              {
+                  isOverflowed = true;
+                  overFlowType = "Disk";
+              }
+              else if(cpuUsage >= cpuOverflowCount)
+              {
+                  isOverflowed = true;
+                  overFlowType = "CPU";
+              }
+              if(isOverflowed)
+              {
+                  System.out.println("Overflowed");
+                MailerModel.sendToAllMailList("Alert From PingNet Hardware(" + hardwareModel.getIpHostname() + ")", " " + overFlowType + " usage exceeded!"  );
+
+              }
               listener.onHardwareLogUpdated(HardwareLogModel.this);
-              //  System.out.println(result);
 
              } catch (Exception e) {
                  instance.connect();
