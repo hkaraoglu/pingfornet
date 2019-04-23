@@ -6,8 +6,8 @@ Server Monitoring Tool by written in Java.
 You can watch server's **CPU, RAM** AND **Disk** usage by this tool.  This tool also **ping** any **ip/hostname** or **http request** to any url.
 
 **Ping  / Request Screen:**
-![enter image description here](https://ibb.co/DrQwrqM)
+![enter image description here](https://raw.githubusercontent.com/hkaraoglu/pingfornet/master/screenshots/s1.png?token=ABYQPG42CH2EF2L6D4JD7B24X57FK)
 
 
 **CPU / RAM / Disk Screen:**
-![enter image description here](https://ibb.co/nnpmHyW)
+![enter image description here](https://github.com/hkaraoglu/pingfornet/blob/master/screenshots/s2.png?raw=true)
